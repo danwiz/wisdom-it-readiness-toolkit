@@ -4,9 +4,9 @@ A governed open-source toolkit for assessing and improving practical technology 
 
 ## Current release
 
-**v0.1.0 release candidate**
+**v0.1.0 released**
 
-The initial release provides a Technology Readiness Quick Check, deterministic weighted scoring, maturity classification, JSON output, Markdown report generation, synthetic example data, tests, and continuous integration.
+The first public release provides a Technology Readiness Quick Check, deterministic weighted scoring, maturity classification, JSON output, Markdown report generation, synthetic example data, tests, and continuous integration.
 
 ## Quick start
 
