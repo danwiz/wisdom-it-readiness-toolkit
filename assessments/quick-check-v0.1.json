@@ -1,0 +1,53 @@
+{
+  "assessment_id": "WITRT-QUICK-001",
+  "title": "Technology Readiness Quick Check",
+  "version": "0.1.0",
+  "status": "release-candidate",
+  "scale": {
+    "0": "Not in place",
+    "1": "Partially in place",
+    "2": "Consistently in place"
+  },
+  "domains": [
+    {
+      "id": "strategy",
+      "title": "Strategy and Goals",
+      "questions": [
+        {"id": "STR-01", "prompt": "Technology priorities are documented and linked to current goals.", "weight": 2},
+        {"id": "STR-02", "prompt": "A responsible owner is identified for important technology decisions.", "weight": 1}
+      ]
+    },
+    {
+      "id": "infrastructure",
+      "title": "Devices and Infrastructure",
+      "questions": [
+        {"id": "INF-01", "prompt": "Critical devices and systems are inventoried and supported.", "weight": 2},
+        {"id": "INF-02", "prompt": "Internet, Wi-Fi, and essential services are reliable for normal operations.", "weight": 2}
+      ]
+    },
+    {
+      "id": "security",
+      "title": "Cybersecurity and Resilience",
+      "questions": [
+        {"id": "SEC-01", "prompt": "Multi-factor authentication protects critical accounts.", "weight": 3},
+        {"id": "SEC-02", "prompt": "Important data is backed up and restoration can be verified.", "weight": 3},
+        {"id": "SEC-03", "prompt": "Security updates are applied within a defined timeframe.", "weight": 2}
+      ]
+    },
+    {
+      "id": "operations",
+      "title": "Support and Governance",
+      "questions": [
+        {"id": "OPS-01", "prompt": "A repeatable process exists for support requests and incidents.", "weight": 2},
+        {"id": "OPS-02", "prompt": "Technology risks and improvement actions are reviewed periodically.", "weight": 2}
+      ]
+    }
+  ],
+  "maturity_bands": [
+    {"minimum_percent": 0, "maximum_percent": 24.99, "level": 1, "label": "Unprepared"},
+    {"minimum_percent": 25, "maximum_percent": 44.99, "level": 2, "label": "Basic"},
+    {"minimum_percent": 45, "maximum_percent": 64.99, "level": 3, "label": "Repeatable"},
+    {"minimum_percent": 65, "maximum_percent": 84.99, "level": 4, "label": "Managed"},
+    {"minimum_percent": 85, "maximum_percent": 100, "level": 5, "label": "Optimized"}
+  ]
+}
