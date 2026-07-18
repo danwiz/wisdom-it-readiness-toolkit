@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "wisdom-it-readiness-toolkit"
+version = "0.1.0"
+description = "A governed toolkit for practical technology readiness assessment."
+readme = "README.md"
+requires-python = ">=3.11"
+license = {text = "MIT"}
+authors = [{name = "Dane Wisdom"}]
+keywords = ["it-readiness", "technology-assessment", "cybersecurity", "governance"]
+
+[project.scripts]
+witrt = "cli:main"
+
+[tool.setuptools]
+py-modules = ["cli", "report", "scorer"]
+package-dir = {"" = "src"}
