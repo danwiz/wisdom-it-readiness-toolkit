@@ -32,7 +32,7 @@ jobs:
           test -s build/example-report.md
           grep -q "Overall score" build/example-report.md
           grep -q "Priority actions" build/example-report.md
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: example-readiness-report
           path: build/example-report.md
