@@ -6,23 +6,39 @@ on:
   pull_request:
   workflow_dispatch:
 
+concurrency:
+  group: toolkit-ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 permissions:
   contents: read
 
 jobs:
   test:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
+
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - name: Check out repository
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Set up Python
+        uses: actions/setup-python@v7
         with:
           python-version: "3.11"
+          cache: pip
+
       - name: Install package
         run: python -m pip install .
+
       - name: Run unit tests
         run: python -m unittest discover -s tests -v
+
       - name: Score synthetic assessment through installed CLI
         run: witrt score assessments/quick-check-v0.1.json examples/synthetic-responses.json
+
       - name: Generate example report through installed CLI
         run: |
           witrt report assessments/quick-check-v0.1.json examples/synthetic-responses.json \
@@ -32,7 +48,11 @@ jobs:
           test -s build/example-report.md
           grep -q "Overall score" build/example-report.md
           grep -q "Priority actions" build/example-report.md
-      - uses: actions/upload-artifact@v4
+
+      - name: Upload example readiness report
+        uses: actions/upload-artifact@v7
         with:
           name: example-readiness-report
           path: build/example-report.md
+          if-no-files-found: error
+          retention-days: 14
