@@ -8,7 +8,7 @@ version = "0.1.0"
 description = "A governed toolkit for practical technology readiness assessment."
 readme = "README.md"
 requires-python = ">=3.11"
-license = {text = "MIT"}
+license = "MIT"
 authors = [{name = "Dane Wisdom"}]
 keywords = ["it-readiness", "technology-assessment", "cybersecurity", "governance"]
 
