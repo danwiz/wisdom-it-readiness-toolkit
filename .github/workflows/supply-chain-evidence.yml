@@ -13,6 +13,7 @@ permissions:
   contents: read
   id-token: write
   attestations: write
+  artifact-metadata: write
 
 jobs:
   build-evidence:
@@ -21,10 +22,12 @@ jobs:
 
     steps:
       - name: Check out repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v7
         with:
           python-version: '3.11'
           cache: pip
@@ -38,9 +41,6 @@ jobs:
       - name: Build source and wheel distributions
         run: python -m build
 
-      - name: Generate release checksums
-        run: sha256sum dist/* | tee dist/SHA256SUMS.txt
-
       - name: Generate SPDX JSON SBOM
         uses: anchore/sbom-action@v0
         with:
@@ -51,13 +51,21 @@ jobs:
           upload-artifact: false
           upload-release-assets: false
 
+      - name: Generate release checksums
+        working-directory: dist
+        run: |
+          find . -maxdepth 1 -type f ! -name 'SHA256SUMS.txt' -printf '%f\0' \
+            | sort -z \
+            | xargs -0 sha256sum \
+            | tee SHA256SUMS.txt
+
       - name: Attest release artifacts and evidence
         uses: actions/attest@v4
         with:
           subject-path: 'dist/*'
 
       - name: Upload release evidence
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: supply-chain-evidence-${{ github.sha }}
           path: dist/
