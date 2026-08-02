@@ -14,7 +14,7 @@ Before approving a held or materially changed workflow, review:
 
 - Event triggers, especially `pull_request_target`, `workflow_run`, release, scheduled, and manual triggers.
 - Requested `GITHUB_TOKEN` permissions.
-- Use of `id-token: write`, attestations, deployments, packages, or release permissions.
+- Use of `id-token: write`, `attestations: write`, `artifact-metadata: write`, deployments, packages, or release permissions.
 - Exposure of repository, environment, or organization secrets.
 - Checkout source and ref, especially code originating from forks.
 - Third-party Actions, their publishers, release notes, runtime versions, and immutable commit references.
@@ -30,6 +30,18 @@ Before approving a held or materially changed workflow, review:
 - Record the upstream tag or version corresponding to each pinned SHA.
 - Do not bypass a held-workflow warning merely to obtain a green check.
 
+### Current workflow version decision
+
+The initial controlled pilot uses reviewed major-version references rather than immutable SHAs:
+
+- `actions/checkout@v7`
+- `actions/setup-python@v7`
+- `anchore/sbom-action@v0`
+- `actions/attest@v4`
+- `actions/upload-artifact@v7`
+
+This is an explicit, temporary exception for the pilot. The repository uses weekly Dependabot coverage for GitHub Actions, requires independent review of every major-version change, and prohibits automatic merging. After the first successful evidence run, the maintainers should decide whether to replace these references with immutable commit SHAs and recorded upstream tags.
+
 ## Fork and external-contributor controls
 
 - Do not expose secrets to untrusted fork code.
@@ -42,8 +54,10 @@ Before approving a held or materially changed workflow, review:
 For `.github/workflows/supply-chain-evidence.yml`:
 
 - Keep manual and release triggers to control Actions usage.
-- Retain least-privilege permissions: `contents: read`, `id-token: write`, and `attestations: write` only where needed.
-- Verify tests, package build, checksum generation, SBOM generation, provenance attestation, and artifact upload.
+- Retain least-privilege permissions: `contents: read`, `id-token: write`, `attestations: write`, and `artifact-metadata: write` only where needed.
+- Do not persist checkout credentials.
+- Verify tests, package build, SBOM generation, deterministic checksum generation, provenance attestation, and artifact upload.
+- Ensure the checksum manifest covers the built distributions and SBOM.
 - Download and inspect the evidence bundle.
 - Independently verify at least one attestation.
 - Record the run URL, commit, artifact inventory, verification command, result, and any exceptions in the governing issue.
