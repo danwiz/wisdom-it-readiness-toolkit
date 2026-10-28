@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "wisdom-it-readiness-toolkit"
-version = "0.1.0"
+version = "0.2.0.dev0"
 description = "A governed toolkit for practical technology readiness assessment."
 readme = "README.md"
 requires-python = ">=3.11"
@@ -17,4 +17,8 @@ witrt = "cli:main"
 
 [tool.setuptools]
 py-modules = ["cli", "report", "scorer"]
-package-dir = {"" = "src"}
+packages = ["wisdom_it_readiness_data"]
+package-dir = {"" = "src", "wisdom_it_readiness_data" = "assessments"}
+
+[tool.setuptools.package-data]
+wisdom_it_readiness_data = ["*.json"]

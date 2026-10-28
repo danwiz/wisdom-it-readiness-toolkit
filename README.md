@@ -51,3 +51,7 @@ The toolkit operates locally and does not transmit assessment data. Users are re
 ## License
 
 MIT License. See `LICENSE`.
+
+## Development installation and errors
+
+The unreleased v0.2.0 work adds strict validation, bundled assessment access, and documented CLI exit codes. See [installation and troubleshooting](docs/installation-and-errors.md) and the [requirements baseline](docs/requirements-v0.2.0.md). Published v0.1.0 artifacts are unchanged.

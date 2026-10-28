@@ -4,10 +4,14 @@ from __future__ import annotations
 
 import argparse
 import json
+import sys
+import os
+import tempfile
+from importlib.resources import files
 from pathlib import Path
 
 from report import generate_markdown_report
-from scorer import load_json, score_assessment
+from scorer import load_json, parse_json, score_assessment
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -27,29 +31,56 @@ def build_parser() -> argparse.ArgumentParser:
     return parser
 
 
-def main() -> None:
-    args = build_parser().parse_args()
-    assessment = load_json(args.assessment)
-    responses = load_json(args.responses)
-    result = score_assessment(assessment, responses)
+def _load_assessment(reference: str) -> dict:
+    if reference == "builtin:quick-check":
+        return parse_json(files("wisdom_it_readiness_data").joinpath("quick-check-v0.1.json").read_text(encoding="utf-8"))
+    return load_json(reference)
 
-    if args.command == "score":
-        print(json.dumps(result.__dict__, indent=2, sort_keys=True))
-        return
 
-    output = Path(args.output)
+def _write_report(output: Path, text: str) -> None:
     output.parent.mkdir(parents=True, exist_ok=True)
-    output.write_text(
-        generate_markdown_report(
-            assessment,
-            result,
-            subject=args.subject,
-            data_note=args.data_note,
-        ),
-        encoding="utf-8",
-    )
-    print(output)
+    temporary = None
+    try:
+        with tempfile.NamedTemporaryFile(mode="w", encoding="utf-8", newline="\n",
+                                         dir=output.parent, delete=False) as handle:
+            temporary = Path(handle.name)
+            handle.write(text)
+        os.replace(temporary, output)
+    finally:
+        if temporary is not None:
+            temporary.unlink(missing_ok=True)
+
+
+def main() -> int:
+    args = build_parser().parse_args()
+    try:
+        assessment = _load_assessment(args.assessment)
+        responses = load_json(args.responses)
+        result = score_assessment(assessment, responses)
+        if args.command == "score":
+            print(json.dumps(result.__dict__, indent=2, sort_keys=True, allow_nan=False))
+            return 0
+        output = Path(args.output)
+        # Never overwrite an input file, including paths that resolve through symlinks.
+        sources = [Path(args.responses).resolve()]
+        if args.assessment != "builtin:quick-check":
+            sources.append(Path(args.assessment).resolve())
+        if output.resolve() in sources or any(output.exists() and output.samefile(p) for p in sources):
+            raise ValueError("Report output must be different from input files")
+        text = generate_markdown_report(assessment, result, subject=args.subject, data_note=args.data_note)
+        _write_report(output, text)
+        print(output)
+        return 0
+    except (ValueError, UnicodeError, RecursionError) as exc:
+        message = "Input nesting is too deep" if isinstance(exc, RecursionError) else str(exc)
+        if isinstance(exc, UnicodeError):
+            message = "Input files must contain UTF-8 text"
+        print(f"witrt: {message}", file=sys.stderr)
+        return 2
+    except OSError:
+        print("witrt: Cannot read input or write report; check file existence, permissions and output directory", file=sys.stderr)
+        return 1
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())
