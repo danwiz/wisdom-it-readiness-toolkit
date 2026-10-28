@@ -5,9 +5,11 @@ from __future__ import annotations
 import json
 import math
 from decimal import Decimal
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
+
+from recommendations import build_guidance
 
 
 @dataclass(frozen=True)
@@ -17,6 +19,8 @@ class ScoreResult:
     maturity_label: str
     domain_scores: dict[str, float]
     unanswered_questions: list[str]
+    coverage: dict[str, Any] = field(default_factory=dict)
+    recommendations: list[dict[str, Any]] = field(default_factory=list)
 
 
 def _finite_number(value: Any) -> bool:
@@ -178,7 +182,8 @@ def score_assessment(assessment: dict[str, Any], responses: dict[str, Any]) -> S
 
     overall_percent = round((overall_earned / overall_possible) * 100, 2)
     maturity_level, maturity_label = _maturity_for_percent(assessment, overall_percent)
-    return ScoreResult(overall_percent, maturity_level, maturity_label, domain_scores, unanswered)
+    coverage, recommendations = build_guidance(assessment, domain_scores, unanswered, maturity_label)
+    return ScoreResult(overall_percent, maturity_level, maturity_label, domain_scores, unanswered, coverage, recommendations)
 
 
 def load_json(path: str | Path) -> dict[str, Any]:

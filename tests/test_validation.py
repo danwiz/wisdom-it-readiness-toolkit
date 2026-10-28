@@ -14,7 +14,7 @@ class ValidationTests(unittest.TestCase):
 
     def test_legacy_golden_result(self):
         r = score_assessment(self.assessment, self.responses)
-        self.assertEqual(r.__dict__, dict(overall_percent=47.37, maturity_level=3,
+        self.assertEqual({k: v for k, v in r.__dict__.items() if k not in ("coverage", "recommendations")}, dict(overall_percent=47.37, maturity_level=3,
             maturity_label='Repeatable', domain_scores=dict(strategy=83.33,infrastructure=75.0,security=31.25,operations=25.0), unanswered_questions=[]))
         r = score_assessment(self.assessment, {'STR-01': 2})
         self.assertEqual(r.overall_percent, 100)

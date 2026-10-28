@@ -17,11 +17,19 @@ with tempfile.TemporaryDirectory() as directory:
         return subprocess.run([executable,*args],cwd=root,env=env,capture_output=True,text=True,timeout=30)
     result = run('score','builtin:quick-check',str(response))
     assert result.returncode == 0, result.stderr
-    assert json.loads(result.stdout)['overall_percent'] == 100
+    score = json.loads(result.stdout)
+    assert score['overall_percent'] == 100
+    assert score['coverage']['answered'] == 1 and score['coverage']['total'] == 9
+    assert score['coverage']['incomplete'] is True
+    assert any(item['rule_id'] == 'complete-evidence' for item in score['recommendations'])
+    assert run('score','builtin:quick-check',str(response)).stdout == result.stdout
     output = root/'report.md'
     result = run('report','builtin:quick-check',str(response),'--output',str(output))
     assert result.returncode == 0 and 'Overall score' in output.read_text(), result.stderr
     original = output.read_bytes()
+    assert b'Answered 1 of 9' in original and b'complete-evidence' in original
+    assert run('report','builtin:quick-check',str(response),'--output',str(output)).returncode == 0
+    assert output.read_bytes() == original
     for payload in ['{', '[]','{"STR-01":true}','{"STR-01":3}', '{"private-value-marker":1}', '{"STR-01":0,"STR-01":2}']:
         response.write_text(payload,encoding='utf-8')
         result = run('report','builtin:quick-check',str(response),'--output',str(output))

@@ -1,0 +1,69 @@
+{
+  "coverage": {
+    "answered": 9,
+    "domains": {
+      "infrastructure": {
+        "answered": 2,
+        "incomplete": false,
+        "total": 2
+      },
+      "operations": {
+        "answered": 2,
+        "incomplete": false,
+        "total": 2
+      },
+      "security": {
+        "answered": 3,
+        "incomplete": false,
+        "total": 3
+      },
+      "strategy": {
+        "answered": 2,
+        "incomplete": false,
+        "total": 2
+      }
+    },
+    "incomplete": false,
+    "total": 9
+  },
+  "domain_scores": {
+    "infrastructure": 75.0,
+    "operations": 25.0,
+    "security": 31.25,
+    "strategy": 83.33
+  },
+  "maturity_label": "Repeatable",
+  "maturity_level": 3,
+  "overall_percent": 47.37,
+  "recommendations": [
+    {
+      "domain_id": "operations",
+      "next_action": "Identify an accountable owner and implement missing practices in this domain with documented verification evidence.",
+      "priority": "high",
+      "rationale": "Supplied responses score below 45%. Domain score: 25.00%; overall maturity from supplied responses: Repeatable.",
+      "rule_id": "establish-baseline"
+    },
+    {
+      "domain_id": "security",
+      "next_action": "Identify an accountable owner and implement missing practices in this domain with documented verification evidence.",
+      "priority": "high",
+      "rationale": "Supplied responses score below 45%. Domain score: 31.25%; overall maturity from supplied responses: Repeatable.",
+      "rule_id": "establish-baseline"
+    },
+    {
+      "domain_id": "infrastructure",
+      "next_action": "Sample evidence for this domain and close inconsistent practices.",
+      "priority": "low",
+      "rationale": "Supplied responses score from 65% to below 85%. Domain score: 75.00%; overall maturity from supplied responses: Repeatable.",
+      "rule_id": "verify-consistency"
+    },
+    {
+      "domain_id": "strategy",
+      "next_action": "Sample evidence for this domain and close inconsistent practices.",
+      "priority": "low",
+      "rationale": "Supplied responses score from 65% to below 85%. Domain score: 83.33%; overall maturity from supplied responses: Repeatable.",
+      "rule_id": "verify-consistency"
+    }
+  ],
+  "unanswered_questions": []
+}
