@@ -55,3 +55,5 @@ MIT License. See `LICENSE`.
 ## Development installation and errors
 
 The unreleased v0.2.0 work adds strict validation, bundled assessment access, and documented CLI exit codes. See [installation and troubleshooting](docs/installation-and-errors.md) and the [requirements baseline](docs/requirements-v0.2.0.md). Published v0.1.0 artifacts are unchanged.
+
+The development CLI also adds [deterministic recommendations and coverage](docs/recommendations.md) to JSON and Markdown; see the synthetic examples and documented limitations.
