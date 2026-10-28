@@ -15,10 +15,10 @@ ASSESSMENT = {
     "version": "0.1.0",
     "scale": {"0": "No", "1": "Partial", "2": "Yes"},
     "maturity_bands": [
-        {"minimum_percent": 0, "maximum_percent": 24, "level": 1, "label": "Unprepared"},
-        {"minimum_percent": 25, "maximum_percent": 44, "level": 2, "label": "Basic"},
-        {"minimum_percent": 45, "maximum_percent": 64, "level": 3, "label": "Repeatable"},
-        {"minimum_percent": 65, "maximum_percent": 84, "level": 4, "label": "Managed"},
+        {"minimum_percent": 0, "maximum_percent": 24.99, "level": 1, "label": "Unprepared"},
+        {"minimum_percent": 25, "maximum_percent": 44.99, "level": 2, "label": "Basic"},
+        {"minimum_percent": 45, "maximum_percent": 64.99, "level": 3, "label": "Repeatable"},
+        {"minimum_percent": 65, "maximum_percent": 84.99, "level": 4, "label": "Managed"},
         {"minimum_percent": 85, "maximum_percent": 100, "level": 5, "label": "Optimized"},
     ],
     "domains": [
