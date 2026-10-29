@@ -49,10 +49,13 @@ jobs:
           grep -q "Overall score" build/example-report.md
           grep -q "Priority actions" build/example-report.md
 
+      - name: Generate standalone synthetic HTML report
+        run: witrt report builtin:quick-check examples/synthetic-responses.json --format html --subject "Synthetic Demonstration" --data-note "Synthetic demonstration only" --output build/example-report.html
+
       - name: Upload example readiness report
         uses: actions/upload-artifact@v7
         with:
           name: example-readiness-report
-          path: build/example-report.md
+          path: build/example-report.*
           if-no-files-found: error
           retention-days: 14

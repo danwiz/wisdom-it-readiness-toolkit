@@ -57,3 +57,5 @@ MIT License. See `LICENSE`.
 The unreleased v0.2.0 work adds strict validation, bundled assessment access, and documented CLI exit codes. See [installation and troubleshooting](docs/installation-and-errors.md) and the [requirements baseline](docs/requirements-v0.2.0.md). Published v0.1.0 artifacts are unchanged.
 
 The development CLI also adds [deterministic recommendations and coverage](docs/recommendations.md) to JSON and Markdown; see the synthetic examples and documented limitations.
+
+Standalone HTML is available in development with explicit `--format html`; see [HTML reports and accessibility checks](docs/html-reports.md), [prepared v0.2.0 release notes](RELEASE_NOTES_v0.2.0.md), and the [development case study](docs/toolkit-case-study.md). Published release references remain v0.1.0.

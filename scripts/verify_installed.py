@@ -30,12 +30,27 @@ with tempfile.TemporaryDirectory() as directory:
     assert b'Answered 1 of 9' in original and b'complete-evidence' in original
     assert run('report','builtin:quick-check',str(response),'--output',str(output)).returncode == 0
     assert output.read_bytes() == original
+    html_output = root/'report.html'
+    result = run('report','builtin:quick-check',str(response),'--format','html','--subject','<script>probe</script>','--output',str(html_output))
+    assert result.returncode == 0, result.stderr
+    html_original = html_output.read_bytes()
+    assert b'<!doctype html>' in html_original and b'Answered 1 of 9' in html_original
+    assert b'&lt;script&gt;probe&lt;/script&gt;' in html_original and b'<script>' not in html_original
+    assert run('report','builtin:quick-check',str(response),'--format','html','--subject','<script>probe</script>','--output',str(html_output)).returncode == 0
+    assert html_output.read_bytes() == html_original
+    # Explicit format controls content, regardless of extension; default stays Markdown.
+    assert run('report','builtin:quick-check',str(response),'--output',str(root/'default.html')).returncode == 0
+    assert (root/'default.html').read_text().startswith('# ')
+    assert run('report','builtin:quick-check',str(response),'--format','pdf','--output',str(html_output)).returncode == 2
+    assert html_output.read_bytes() == html_original
     for payload in ['{', '[]','{"STR-01":true}','{"STR-01":3}', '{"private-value-marker":1}', '{"STR-01":0,"STR-01":2}']:
         response.write_text(payload,encoding='utf-8')
         result = run('report','builtin:quick-check',str(response),'--output',str(output))
         assert result.returncode == 2, result.stderr
         assert not result.stdout and 'Traceback' not in result.stderr and 'private-value-marker' not in result.stderr
         assert output.read_bytes() == original
+        html_result = run('report','builtin:quick-check',str(response),'--format','html','--output',str(html_output))
+        assert html_result.returncode == 2 and html_output.read_bytes() == html_original
         assert response.read_text() == payload
     response.write_bytes(b'\xff')
     assert run('score','builtin:quick-check',str(response)).returncode == 2

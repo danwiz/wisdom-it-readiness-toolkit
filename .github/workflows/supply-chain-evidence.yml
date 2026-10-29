@@ -41,6 +41,9 @@ jobs:
       - name: Build source and wheel distributions
         run: python -m build
 
+      - name: Verify both installed distributions and report formats
+        run: python scripts/verify_distributions.py
+
       - name: Generate SPDX JSON SBOM
         uses: anchore/sbom-action@v0
         with:
