@@ -11,6 +11,7 @@ from importlib.resources import files
 from pathlib import Path
 
 from report import generate_markdown_report
+from html_report import generate_html_report
 from scorer import load_json, parse_json, score_assessment
 
 
@@ -22,12 +23,13 @@ def build_parser() -> argparse.ArgumentParser:
     score_parser.add_argument("assessment")
     score_parser.add_argument("responses")
 
-    report_parser = subparsers.add_parser("report", help="Generate a Markdown readiness report")
+    report_parser = subparsers.add_parser("report", help="Generate a Markdown or standalone HTML readiness report")
     report_parser.add_argument("assessment")
     report_parser.add_argument("responses")
     report_parser.add_argument("--subject", default="Assessment subject")
     report_parser.add_argument("--data-note", default="User-provided assessment responses")
     report_parser.add_argument("--output", required=True)
+    report_parser.add_argument("--format", choices=("markdown", "html"), default="markdown")
     return parser
 
 
@@ -67,7 +69,8 @@ def main() -> int:
             sources.append(Path(args.assessment).resolve())
         if output.resolve() in sources or any(output.exists() and output.samefile(p) for p in sources):
             raise ValueError("Report output must be different from input files")
-        text = generate_markdown_report(assessment, result, subject=args.subject, data_note=args.data_note)
+        renderer = generate_html_report if args.format == "html" else generate_markdown_report
+        text = renderer(assessment, result, subject=args.subject, data_note=args.data_note)
         _write_report(output, text)
         print(output)
         return 0

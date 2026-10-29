@@ -16,7 +16,7 @@ keywords = ["it-readiness", "technology-assessment", "cybersecurity", "governanc
 witrt = "cli:main"
 
 [tool.setuptools]
-py-modules = ["cli", "report", "scorer", "recommendations"]
+py-modules = ["cli", "report", "scorer", "recommendations", "html_report"]
 packages = ["wisdom_it_readiness_data"]
 package-dir = {"" = "src", "wisdom_it_readiness_data" = "assessments"}
 
