@@ -22,6 +22,8 @@ def build_parser() -> argparse.ArgumentParser:
     score_parser = subparsers.add_parser("score", help="Score an assessment and print JSON")
     score_parser.add_argument("assessment")
     score_parser.add_argument("responses")
+    score_parser.add_argument("--subject", default="Assessment subject")
+    score_parser.add_argument("--data-note", default="User-provided assessment responses")
 
     report_parser = subparsers.add_parser("report", help="Generate a Markdown or standalone HTML readiness report")
     report_parser.add_argument("assessment")
@@ -60,7 +62,23 @@ def main() -> int:
         responses = load_json(args.responses)
         result = score_assessment(assessment, responses)
         if args.command == "score":
-            print(json.dumps(result.__dict__, indent=2, sort_keys=True, allow_nan=False))
+            payload = dict(result.__dict__)
+            payload["metadata"] = {
+                "assessment_id": assessment.get("assessment_id", "unknown"),
+                "assessment_version": assessment["version"],
+                "subject": args.subject,
+                "data_note": args.data_note,
+                "provenance_basis": "caller-supplied; not independently verified",
+            }
+            payload["limitations"] = [
+                "Scores describe supplied responses, not security assurance or certification.",
+                "Priorities are workflow priorities, not vulnerability severity.",
+                "Review evidence with an accountable owner before acting.",
+                ("Incomplete assessment: scores describe answered questions only and are provisional."
+                 if result.coverage["incomplete"] else
+                 "All questions answered; responses have not been independently verified."),
+            ]
+            print(json.dumps(payload, indent=2, sort_keys=True, allow_nan=False))
             return 0
         output = Path(args.output)
         # Never overwrite an input file, including paths that resolve through symlinks.

@@ -36,3 +36,6 @@ Scoring/reporting does not transmit assessment data. Protect files and reports y
 `python -m unittest discover -s tests -v` checks scoring and schema behavior. After `python -m build`, run `python scripts/verify_distributions.py`. Each distribution is installed in its own temporary virtual environment and the executable runs outside the checkout, exercising bundled data, scoring, reporting, exit codes and unchanged files after errors.
 
 See [requirements](requirements-v0.2.0.md). Recommendations, richer reports, and final release acceptance are separate milestones; this work does not publish v0.2.0.
+
+JSON scoring supports optional `--subject` and `--data-note` and exports additive
+metadata and limitations; see the [JSON output contract](json-output.md).

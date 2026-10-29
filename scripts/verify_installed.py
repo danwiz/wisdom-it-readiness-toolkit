@@ -18,6 +18,17 @@ with tempfile.TemporaryDirectory() as directory:
     result = run('score','builtin:quick-check',str(response))
     assert result.returncode == 0, result.stderr
     score = json.loads(result.stdout)
+    assert score['metadata']['assessment_id'] == 'WITRT-QUICK-001'
+    assert score['metadata']['assessment_version'] == '0.1.0'
+    assert score['metadata']['data_note'] == 'User-provided assessment responses'
+    assert 'not independently verified' in score['metadata']['provenance_basis']
+    assert any('provisional' in line for line in score['limitations'])
+    explicit = run('score','builtin:quick-check',str(response),
+                   '--subject','Synthetic Demonstration','--data-note','Synthetic demonstration only')
+    assert explicit.returncode == 0, explicit.stderr
+    assert json.loads(explicit.stdout)['metadata']['data_note'] == 'Synthetic demonstration only'
+    assert run('score','builtin:quick-check',str(response),
+               '--subject','Synthetic Demonstration','--data-note','Synthetic demonstration only').stdout == explicit.stdout
     assert score['overall_percent'] == 100
     assert score['coverage']['answered'] == 1 and score['coverage']['total'] == 9
     assert score['coverage']['incomplete'] is True

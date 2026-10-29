@@ -79,4 +79,16 @@ Sort by priority (high, medium, low), then domain ID lexicographically, then rul
 
 ## Change control
 
+### JSON parity refinement — 2026-10-29
+
+AC-07 requires JSON context as well as Markdown/HTML context. `score` adds optional
+`--subject` and `--data-note` with the same defaults as `report`. It adds top-level
+`metadata` (assessment_id, assessment_version, subject, data_note, provenance_basis)
+and `limitations`. Provenance is always labeled caller-supplied and unverified;
+no synthetic label is inferred from filenames. Limitations include a coverage-aware
+warning. Existing score-result fields and numeric semantics remain unchanged.
+No timestamps are introduced. See [JSON contract](json-output.md).
+Regression evidence: `tests/test_json_cli.py` and installed CLI checks. This
+refinement does not close accessibility or final release acceptance gates.
+
 Any change to scoring semantics, supported formats, recommendation rules or acceptance criteria must update this baseline and corresponding tests in the same pull request. Record actual test and review evidence before checking release items. This baseline does not publish v0.2.0 or close implementation issues #7–#9.
