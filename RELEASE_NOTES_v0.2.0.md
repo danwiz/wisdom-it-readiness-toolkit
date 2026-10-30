@@ -17,6 +17,11 @@ The package remains 0.2.0.dev0 until release acceptance is complete.
 
 ## Migration from v0.1.0
 
+JSON score exports also add `metadata` and `limitations`. Optional `score`
+arguments `--subject` and `--data-note` mirror report context. The default data
+note is user-provided responses; provenance is explicitly unverified. No label
+is inferred from the filename. See [JSON output](docs/json-output.md).
+
 Valid versioned v0.1.0 assessments and integer response mappings remain supported;
 existing numeric score fields retain their meanings. JSON adds `coverage` and
 `recommendations`; consumers should accept additional fields. Partial scores

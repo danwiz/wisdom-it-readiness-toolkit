@@ -32,8 +32,21 @@
     "security": 31.25,
     "strategy": 83.33
   },
+  "limitations": [
+    "Scores describe supplied responses, not security assurance or certification.",
+    "Priorities are workflow priorities, not vulnerability severity.",
+    "Review evidence with an accountable owner before acting.",
+    "All questions answered; responses have not been independently verified."
+  ],
   "maturity_label": "Repeatable",
   "maturity_level": 3,
+  "metadata": {
+    "assessment_id": "WITRT-QUICK-001",
+    "assessment_version": "0.1.0",
+    "data_note": "Synthetic demonstration only",
+    "provenance_basis": "caller-supplied; not independently verified",
+    "subject": "Synthetic Demonstration"
+  },
   "overall_percent": 47.37,
   "recommendations": [
     {

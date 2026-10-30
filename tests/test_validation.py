@@ -20,6 +20,11 @@ class ValidationTests(unittest.TestCase):
         self.assertEqual(r.overall_percent, 100)
         self.assertEqual(r.domain_scores, {'strategy': 100})
         self.assertEqual(len(r.unanswered_questions), 8)
+        self.assertEqual(r.maturity_level, 5)
+        self.assertEqual(r.maturity_label, 'Optimized')
+        self.assertEqual(r.unanswered_questions, [
+            q['id'] for d in self.assessment['domains'] for q in d['questions']
+            if q['id'] != 'STR-01'])
 
     def test_invalid_assessments_even_when_question_unanswered(self):
         def q(a): return a['domains'][0]['questions'][0]
