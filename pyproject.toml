@@ -17,7 +17,7 @@ witrt = "cli:main"
 
 [tool.setuptools]
 py-modules = ["cli", "report", "scorer", "recommendations", "html_report"]
-packages = ["wisdom_it_readiness_data"]
+packages = ["wisdom_it_readiness_data", "wisdom_it_readiness"]
 package-dir = {"" = "src", "wisdom_it_readiness_data" = "assessments"}
 
 [tool.setuptools.package-data]
